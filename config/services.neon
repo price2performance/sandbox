@@ -1,0 +1,15 @@
+services:
+	security.passwords: Nette\Security\Passwords(::PASSWORD_BCRYPT, [cost: 12])
+	authorizator: Price2Performance\Sandbox\Model\Security\AuthorizatorFactory::create
+	- Price2Performance\Sandbox\Router\RouterFactory::createRouter
+	- Price2Performance\Sandbox\Model\Utils\DirectoryHelper
+
+	# Forms
+	- Price2Performance\Sandbox\Forms\FormFactory
+	- Price2Performance\Sandbox\Forms\SignInFormFactory
+
+	# ORM services
+	- Price2Performance\Sandbox\Model\ORM\Services\UserService
+
+	# Console Commands
+	- Price2Performance\Sandbox\Console\CreateUser

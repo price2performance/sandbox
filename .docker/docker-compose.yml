@@ -1,0 +1,48 @@
+version: '3.7'
+
+services:
+  php:
+    container_name: sandbox
+    build: build/web
+    volumes:
+    - ../:/var/www/html
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - NETTE_DEBUG=1
+      - COMPOSER_AUTH=${COMPOSER_AUTH}
+    links:
+      - database
+
+  database:
+    container_name: sandbox_db
+    image: sandbox_db
+    build: build/database
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+      MYSQL_DATABASE: test
+
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - 8080:80
+    environment:
+      - PMA_HOST=sandbox_db
+      - PMA_USER=test
+      - PMA_PASSWORD=test
+
+  #rabbit:
+  #  container_name: sandbox_rabbit
+  #  image: rabbitmq:3-management
+  #  ports:
+  #    - 5672:5672
+  #    - 15672:15672
+  #  environment:
+  #    RABBITMQ_DEFAULT_USER: test
+  #    RABBITMQ_DEFAULT_PASS: test
+  #    #RABBITMQ_DEFAULT_VHOST: vhost

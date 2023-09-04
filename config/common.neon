@@ -1,0 +1,93 @@
+parameters:
+
+
+application:
+	errorPresenter: Error
+	mapping:
+		*: Price2Performance\Sandbox\*Module\Presenters\*Presenter
+		Admin: Price2Performance\Sandbox\Admin\Presenters\*Presenter
+
+session:
+	expiration: 14 days
+	autoStart: smart
+
+di:
+	export:
+		parameters: yes
+		tags: yes
+
+extensions:
+		console: Contributte\Console\DI\ConsoleExtension(%consoleMode%)
+
+		# Common
+		#nettrine.annotations: Nettrine\Annotations\DI\AnnotationsExtension
+		nettrine.cache: Nettrine\Cache\DI\CacheExtension
+		nettrine.fixtures: Nettrine\Fixtures\DI\FixturesExtension
+		nettrine.migrations: Nettrine\Migrations\DI\MigrationsExtension
+
+		# DBAL
+		nettrine.dbal: Nettrine\DBAL\DI\DbalExtension
+		nettrine.dbal.console: Nettrine\DBAL\DI\DbalConsoleExtension(%consoleMode%)
+
+		# ORM
+		nettrine.orm: Nettrine\ORM\DI\OrmExtension
+		#nettrine.orm.annotations: Nettrine\ORM\DI\OrmAnnotationsExtension
+		nettrine.orm.cache: Nettrine\ORM\DI\OrmCacheExtension
+		nettrine.orm.console: Nettrine\ORM\DI\OrmConsoleExtension
+		nettrine.orm.xml: Nettrine\ORM\DI\OrmXmlExtension
+
+		#nettrine.extensions.atlantic18: Nettrine\Extensions\Atlantic18\DI\Atlantic18BehaviorExtension
+
+decorator:
+    Symfony\Component\Console\Command\Command:
+        tags: [Nette\DI\Extensions\InjectExtension::TAG_INJECT]
+        inject: true
+
+nettrine.orm.xml:
+	mapping: [
+		Price2Performance\Sandbox\Model\ORM\Entity: %appDir%/Model/ORM/Entity/xml
+	]
+	fileExtension: .dcm.xml
+	simple: false
+
+nettrine.orm:
+	configuration:
+		autoGenerateProxyClasses: %debugMode%
+		#customDatetimeFunctions:
+		#	date: DoctrineExtensions\Query\Mysql\Date
+		#	year: DoctrineExtensions\Query\Mysql\Year
+		#	month: DoctrineExtensions\Query\Mysql\Month
+		#customNumericFunctions:
+			#field: DoctrineExtensions\Query\Mysql\Field
+
+nettrine.migrations:
+	directory: %appDir%/Model/ORM/Migrations
+	namespace: Price2Performance\Sandbox\ORM\Migrations
+
+nettrine.fixtures:
+	paths:
+		- %appDir%/../tests/Fixtures
+
+#nettrine.orm.annotations:
+#	mapping:
+#		Gedmo\Sortable: %appDir%/../vendor/gedmo/doctrine-extensions/src/Sortable/Entity
+
+#nettrine.extensions.atlantic18:
+#	sortable: true
+
+#rabbitmq:
+#	queues:
+#		sandboxQueue:
+#			connection: default
+#	producers:
+#		sandboxProducer:
+#			queue: sandboxQueue
+#			contentType: application/json
+#			deliveryMode: 2 # Producer::DELIVERY_MODE_PERSISTENT
+#	consumers:
+#		sandboxConsumer:
+#			queue: sandboxQueue
+#			callback: [@Price2Performance\Sandbox\Console\SandboxConsumer, consume]
+#			qos:
+#				prefetchSize: 0
+#				prefetchCount: 1
