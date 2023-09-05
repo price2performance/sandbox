@@ -6,3 +6,4 @@ vendor/
 deployment.php
 .DS_Store
 libs/
+tests/**/output

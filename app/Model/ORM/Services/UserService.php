@@ -54,6 +54,6 @@ class UserService extends AbstractService implements Authenticator
 		if (!$this->passwords->verify($password, $userEntity->getPassword()))
 			throw new AuthenticationException( 'Password not correct.');
 
-		return new SimpleIdentity($userEntity->getId(), $userEntity->getRole(), ['email' => $userEntity->getEmail(), 'id' => $userEntity->getId()]);
+		return new SimpleIdentity($userEntity->getId(), $userEntity->getRole()->value, ['email' => $userEntity->getEmail(), 'id' => $userEntity->getId()]);
 	}
 }
